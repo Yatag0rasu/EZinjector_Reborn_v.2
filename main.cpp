@@ -43,6 +43,38 @@ bool DoesFileExist(const char* name) {
 	}
 }
 
+LPVOID ntOpenFile = GetProcAddress(LoadLibraryW(L"ntdll"), "NtOpenFile");
+
+void bypass()
+{
+	// Restore original NtOpenFile from external process
+	if (ntOpenFile) {
+		char originalBytes[5];
+		memcpy(originalBytes, ntOpenFile, 5);
+		WriteProcessMemory(inj.process, ntOpenFile, originalBytes, 5, NULL);
+	} 
+	else
+	{
+		cout << "Unable to bypass.\n";
+	}
+}
+
+void Backup()
+{
+	if (ntOpenFile) {
+		//So, when I patching first 5 bytes I need to backup them to 0? (I think)
+		char originalBytes[5];
+		memcpy(originalBytes, ntOpenFile, 5);
+		WriteProcessMemory(inj.process, ntOpenFile, originalBytes, 0, NULL);
+	}
+	else
+	{
+		cout << "Unable to backup :(\n";
+		Sleep(2000);
+		exit(-1);
+	}
+}
+
 int main()
 {
 	SetConsoleTitle("EZinjector - modified by Yatagarasu");
@@ -74,12 +106,14 @@ int main()
 
 			if (inj.inject(pid, namedll)) {
 				cout << "Injection successful! You can close this window.\n\n" << endl;
+					Backup();
 					Sleep(5000);
 					exit(0);
 			}
 			else
 			{
 				cout << "Injection failed, try run as Administrator.\n\n" << endl;
+					Backup();
 					system("pause");
 			}
 
