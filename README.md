@@ -7,7 +7,7 @@ First, this injector has the ability to select any running process on your compu
 Second, it has an improved workaround against anti-injection by backing up and restoring the first 5 bytes of the NtOpenFile after injection.
 ## How it works
 
-You run the injector as administrator.
+Run the injector as administrator.
 
 After starting, you need to enter the name of the process, for example "hl2.exe" and then press "Enter".
 
