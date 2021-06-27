@@ -33,16 +33,10 @@ public:
 
 	bool inject(DWORD pid, const char* dll)
 	{
-		LPVOID LoadLibAddy;
 
 		char myDLL[MAX_PATH];
 		GetFullPathName(dll, MAX_PATH, myDLL, 0);
-
-		LoadLibAddy = (LPVOID)GetProcAddress(GetModuleHandle("kernel32.dll"), "LoadLibraryA");
-
-		if (!GetModuleHandle("kernel32.dll"))
-			LoadLibrary("kernel32.dll");
-
+		
 		HANDLE hProcess = OpenProcess(PROCESS_CREATE_THREAD | PROCESS_QUERY_INFORMATION | PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, FALSE, pid);
 
 		LPVOID allocatedMem = VirtualAllocEx(hProcess, NULL, sizeof(myDLL), MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
