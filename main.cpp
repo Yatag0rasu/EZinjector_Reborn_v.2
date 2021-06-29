@@ -103,6 +103,7 @@ int main()
 	
 
 	if (DoesFileExist(namedll)) {
+		bypass();
 
 			if (inj.inject(pid, namedll)) {
 				cout << "Injection successful! You can close this window.\n\n" << endl;
